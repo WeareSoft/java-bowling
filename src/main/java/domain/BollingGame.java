@@ -1,5 +1,7 @@
 package domain;
 
+import output.BollingScorePresentable;
+
 import java.util.List;
 
 public class BollingGame {
@@ -17,5 +19,9 @@ public class BollingGame {
 
     public Player nextPlayer() {
         return null;
+    }
+
+    public void printScore(BollingScorePresentable presenter) {
+        presenter.show(this);
     }
 }
