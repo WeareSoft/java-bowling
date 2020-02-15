@@ -1,6 +1,6 @@
 package input;
 
-public interface BollingGameInputtable {
+public interface BowlingGameInputtable {
     String getPlayerName();
     int getFallingPint();
 }

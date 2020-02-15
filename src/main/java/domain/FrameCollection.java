@@ -1,7 +1,5 @@
 package domain;
 
-import output.BollingScorePresentable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +10,13 @@ public class FrameCollection {
         frameList.add(frame);
     }
 
-    public void printScore(BollingScorePresentable printer) {
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        frameList.stream()
+                .map(Frame::toString)
+                .forEach(s -> stringBuilder.append(s).append("  |  "));
 
+        return stringBuilder.toString();
     }
 }

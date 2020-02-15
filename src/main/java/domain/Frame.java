@@ -1,50 +1,70 @@
 package domain;
 
-import output.BollingScorePresentable;
+import static domain.Frame.FrameStatus.*;
 
 public class Frame implements Scorable {
 
-    public final static int DEFAULT_BOLLING_PIN = 10;
+	public final static int DEFAULT_BOWLING_PIN = 10;
 
-    private FallingPin first = FallingPin.NONE;
-    private FallingPin second = FallingPin.NONE;
+	private FallingPin first = FallingPin.NONE;
+	private FallingPin second = FallingPin.NONE;
 
-    public Frame(FallingPin first, FallingPin second) {
-        this.first = first;
-        this.second = second;
-    }
+	public Frame(FallingPin first, FallingPin second) {
+		this.first = first;
+		this.second = second;
+	}
 
-    public FrameStatus getStatus() {
-        if (first.value() == DEFAULT_BOLLING_PIN) {
-            return FrameStatus.STRIKE;
-        }
+	@Override
+	public Score getScore() {
+		// some way of calculate score
+		return Score.ZERO_SCORE;
+	}
 
-        if (first.value() + second.value() == DEFAULT_BOLLING_PIN) {
-            return FrameStatus.SPARE;
-        }
+	public boolean isEnd() {
+		if (first.equals(FallingPin.NONE)) {
+			return false;
+		}
 
-        if (first.value() + second.value() == 0) {
-            return FrameStatus.MISS;
-        }
+		return FrameStatus.of(this).equals(STRIKE);
+	}
 
-        return FrameStatus.SPARE;
-    }
+	public enum FrameStatus {
+		STRIKE("X"), SPARE("/"), MISS("-"), HIT("");
 
-    @Override
-    public Score getScore() {
-        // some way of calculate score
-        return Score.ZERO_SCORE;
-    }
+		String symbol;
 
-    public void print(BollingScorePresentable pinter) {
-        pinter.show(this);
-    }
+		FrameStatus(String symbol) {
+			this.symbol = symbol;
+		}
 
-    public FallingPin getFirst() {
-        return first;
-    }
+		public static FrameStatus of(Frame frame) {
+			FallingPin first = frame.first;
 
-    public FallingPin getSecond() {
-        return second;
-    }
+			if (first.value() == DEFAULT_BOWLING_PIN) {
+				return STRIKE;
+			}
+
+			FallingPin second = frame.second;
+
+			if (first.value() + second.value() == DEFAULT_BOWLING_PIN) {
+				return SPARE;
+			}
+
+			return HIT;
+		}
+	}
+
+	@Override
+	public String toString() {
+		switch (FrameStatus.of(this)) {
+			case STRIKE:
+				return STRIKE.symbol;
+
+			case SPARE:
+				return first.getSymbol() + "|" + SPARE.symbol;
+
+			default:
+				return first.getSymbol() + "|" + second.getSymbol();
+		}
+	}
 }

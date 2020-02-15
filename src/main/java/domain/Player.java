@@ -1,29 +1,30 @@
 package domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Player {
     private String name;
-    private List<Frame> frames = new ArrayList<>();
+    private FrameCollection frames = new FrameCollection();
+    private Frame currentFrame;
 
-    public Player(String playerName) {
-
+    public Player(String playerName, FrameCollection frameCollection) {
         this.name = playerName;
+        this.frames = frameCollection;
     }
 
     public int bowl(int fallingPinCount) {
-        Frame currentFrame = getCurrentFrame();
-        return 1;
-        //return currentFrame.bowl(fallingPinCount);
+
+        return 0;
     }
 
-    private Frame getCurrentFrame() {
-        int lastFrameIndex = frames.size() - 1;
-        return frames.get(lastFrameIndex);
+    public FrameCollection getFrames() {
+        return frames;
     }
 
-    public boolean isEnd() {
-        return false;
+    @Override
+    public String toString() {
+        return "|" + name + "|" + frames;
+    }
+
+    public boolean hasChance() {
+        return !currentFrame.isEnd();
     }
 }
