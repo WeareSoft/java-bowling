@@ -4,17 +4,26 @@ import java.security.InvalidParameterException;
 
 public class NormalFrame {
 
-    private long frameNo;
+    private FrameNo frameNo;
 
     public NormalFrame(long frameNo) {
-        if (frameNo <= 0) {
-            throw new InvalidParameterException("required valid frame no");
-        }
-
-        this.frameNo = frameNo;
+        this.frameNo = new FrameNo(frameNo);
     }
 
     public long getFrameNo() {
-        return frameNo;
+        return frameNo.value;
+    }
+
+    class FrameNo {
+
+        private long value;
+
+        FrameNo(long value) {
+            if (value <= 0) {
+                throw new InvalidParameterException("required valid frame no");
+            }
+
+            this.value = value;
+        }
     }
 }
