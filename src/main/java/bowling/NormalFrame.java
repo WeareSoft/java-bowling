@@ -5,17 +5,17 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class NormalFrame {
     private static final int MIN_PINS = 0;
-    private static final int MAX_SCORE = 10;
-    private static final int MAX_COUNT = 2;
 
     private AtomicLong count;
     private long score;
     private FrameNo frameNo;
+    private BowlingThrowStrategy strategy;
 
     public NormalFrame(long frameNo) {
         this.frameNo = new FrameNo(frameNo);
         this.count = new AtomicLong();
         this.score = 0;
+        this.strategy = new NormalThrowStrategy();
     }
 
     public long getFrameNo() {
@@ -34,7 +34,7 @@ public class NormalFrame {
     }
 
     private boolean isPossibleThrowing() {
-        return score < MAX_SCORE && count.get() < MAX_COUNT;
+        return strategy.isPossibleThrowing(score, count.get());
     }
 
     public ScoreType getScore() {
