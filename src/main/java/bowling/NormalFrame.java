@@ -4,14 +4,18 @@ import java.security.InvalidParameterException;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class NormalFrame {
+    private static final int MIN_PINS = 0;
+    private static final int MAX_SCORE = 10;
+    private static final int MAX_COUNT = 2;
 
     private AtomicLong count;
-    private long score = 0;
+    private long score;
     private FrameNo frameNo;
 
     public NormalFrame(long frameNo) {
         this.frameNo = new FrameNo(frameNo);
         this.count = new AtomicLong();
+        this.score = 0;
     }
 
     public long getFrameNo() {
@@ -19,7 +23,7 @@ public class NormalFrame {
     }
 
     public void throwBowling(int droppedPins) {
-        if (droppedPins < 0) {
+        if (droppedPins < MIN_PINS) {
             throw new InvalidParameterException("required valid droppedPins");
         }
 
@@ -30,7 +34,7 @@ public class NormalFrame {
     }
 
     private boolean isPossibleThrowing() {
-        return score < 10 && count.get() < 2;
+        return score < MAX_SCORE && count.get() < MAX_COUNT;
     }
 
     public ScoreType getScore() {
