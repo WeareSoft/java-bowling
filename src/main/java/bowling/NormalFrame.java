@@ -22,9 +22,15 @@ public class NormalFrame {
         if (droppedPins < 0) {
             throw new InvalidParameterException("required valid droppedPins");
         }
-        
-        count.incrementAndGet();
-        score += droppedPins;
+
+        if (isPossibleThrowing()) {
+            count.incrementAndGet();
+            score += droppedPins;
+        }
+    }
+
+    private boolean isPossibleThrowing() {
+        return score < 10 && count.get() < 2;
     }
 
     public ScoreType getScore() {

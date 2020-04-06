@@ -12,10 +12,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class NormalFrameTest {
+
     private NormalFrame frame;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         frame = new NormalFrame(1);
     }
 
@@ -81,6 +82,36 @@ class NormalFrameTest {
             Exception exception = assertThrows(InvalidParameterException.class, () -> frame.throwBowling(-1));
 
             assertThat(exception).hasMessageContaining("required valid droppedPins");
+        }
+
+        @Test
+        @DisplayName("특정 횟수 이상으로 던져도 같은 결과를 반환한다")
+        public void test_repeat() {
+            frame.throwBowling(10);
+            frame.throwBowling(10);
+
+            assertThat(frame.getScore()).isEqualTo(ScoreType.Strike);
+        }
+
+        @Test
+        @DisplayName("던진 순서대로 결과과 결정된다")
+        public void test_repeat2() {
+            frame.throwBowling(5);
+            frame.throwBowling(4);
+            frame.throwBowling(3);
+            frame.throwBowling(3);
+
+            assertThat(frame.getScore()).isEqualTo(ScoreType.Miss);
+        }
+
+        @Test
+        @DisplayName("던진 순서대로 결과과 결정된다")
+        public void test_repeat3() {
+            frame.throwBowling(0);
+            frame.throwBowling(0);
+            frame.throwBowling(10);
+
+            assertThat(frame.getScore()).isEqualTo(ScoreType.Gutter);
         }
     }
 }
