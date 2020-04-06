@@ -1,13 +1,17 @@
 package bowling;
 
 import java.security.InvalidParameterException;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class NormalFrame {
+
+    private AtomicLong count;
     private long score = 0;
     private FrameNo frameNo;
 
     public NormalFrame(long frameNo) {
         this.frameNo = new FrameNo(frameNo);
+        this.count = new AtomicLong();
     }
 
     public long getFrameNo() {
@@ -15,11 +19,16 @@ public class NormalFrame {
     }
 
     public void throwBowling(int droppedPins) {
+        if (droppedPins < 0) {
+            throw new InvalidParameterException("required valid droppedPins");
+        }
+        
+        count.incrementAndGet();
         score += droppedPins;
     }
 
     public ScoreType getScore() {
-        return score == 10 ? ScoreType.Strike : null;
+        return ScoreType.getScoreType(count.get(), score);
     }
 
     class FrameNo {
