@@ -3,7 +3,7 @@ package bowling;
 import java.security.InvalidParameterException;
 
 public class NormalFrame {
-
+    private long score = 0;
     private FrameNo frameNo;
 
     public NormalFrame(long frameNo) {
@@ -12,6 +12,14 @@ public class NormalFrame {
 
     public long getFrameNo() {
         return frameNo.value;
+    }
+
+    public void throwBowling(int droppedPins) {
+        score += droppedPins;
+    }
+
+    public ScoreType getScore() {
+        return score == 10 ? ScoreType.Strike : null;
     }
 
     class FrameNo {
