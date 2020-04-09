@@ -40,8 +40,14 @@ public class NormalFrame {
     }
 
     private void buildNextFrame() {
-        if (!isPossibleThrowing() && !isFinalFrame()) {
-            nextFrame = new NormalFrame(frameNo.value + 1, new NormalThrowStrategy());
+        if (!isPossibleThrowing() && !isFinalFrame(frameNo.value)) {
+            long nextFrameNo = frameNo.value + 1;
+            BowlingThrowStrategy throwStrategy = new NormalThrowStrategy();
+            if (isFinalFrame(nextFrameNo)) {
+                throwStrategy = new FinalThrowStrategy();
+            }
+
+            nextFrame = new NormalFrame(nextFrameNo, throwStrategy);
         }
     }
 
@@ -49,8 +55,8 @@ public class NormalFrame {
         return strategy.isPossibleThrowing(scores);
     }
 
-    private boolean isFinalFrame() {
-        return frameNo.value == FINAL_FRAME_NO;
+    private boolean isFinalFrame(long frameNo) {
+        return frameNo == FINAL_FRAME_NO;
     }
 
     public ScoreType getScore() {

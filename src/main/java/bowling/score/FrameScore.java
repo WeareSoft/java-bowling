@@ -11,8 +11,12 @@ public class FrameScore {
         this.scores = new ArrayList<>();
     }
 
-    public void addScore(long droppedPins){
+    public void addScore(long droppedPins) {
         scores.add(new UnitScore(droppedPins));
+    }
+
+    public long getPartScore(int start, int endExclusive) {
+        return scores.subList(start, endExclusive).stream().mapToLong(UnitScore::getScore).sum();
     }
 
     public long getTotalScore() {
