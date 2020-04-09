@@ -6,15 +6,17 @@ import java.security.InvalidParameterException;
 public class NormalFrame {
 
     private static final int MIN_PINS = 0;
+    public static final int FINAL_FRAME_NO = 10;
 
     private FrameScore scores;
     private FrameNo frameNo;
+    private NormalFrame nextFrame;
     private BowlingThrowStrategy strategy;
 
-    public NormalFrame(long frameNo) {
+    public NormalFrame(long frameNo, BowlingThrowStrategy bowlingThrowStrategy) {
         this.frameNo = new FrameNo(frameNo);
         this.scores = new FrameScore();
-        this.strategy = new NormalThrowStrategy();
+        this.strategy = bowlingThrowStrategy;
     }
 
     public long getFrameNo() {
@@ -26,8 +28,20 @@ public class NormalFrame {
             throw new InvalidParameterException("required valid droppedPins");
         }
 
+        addScore(droppedPins);
+
+        buildNextFrame();
+    }
+
+    private void addScore(int droppedPins) {
         if (isPossibleThrowing()) {
             scores.addScore(droppedPins);
+        }
+    }
+
+    private void buildNextFrame() {
+        if (!isPossibleThrowing() && !isFinalFrame()) {
+            nextFrame = new NormalFrame(frameNo.value + 1, new NormalThrowStrategy());
         }
     }
 
@@ -35,8 +49,16 @@ public class NormalFrame {
         return strategy.isPossibleThrowing(scores);
     }
 
+    private boolean isFinalFrame() {
+        return frameNo.value == FINAL_FRAME_NO;
+    }
+
     public ScoreType getScore() {
         return ScoreType.getScoreType(scores);
+    }
+
+    public NormalFrame getNextFrame() {
+        return this.nextFrame;
     }
 
     class FrameNo {
