@@ -1,5 +1,6 @@
 package bowling;
 
+import bowling.score.FrameScore;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -18,10 +19,10 @@ public enum ScoreType {
         this.score = score;
     }
 
-    public static ScoreType getScoreType(long count, long score) {
+    public static ScoreType getScoreType(FrameScore frameScore) {
         return Stream.of(ScoreType.values())
-                .filter(type -> type.count == count)
-                .filter(type -> type.score.test(score))
+                .filter(type -> type.count == frameScore.getCount())
+                .filter(type -> type.score.test(frameScore.getTotalScore()))
                 .findFirst().orElse(NONE);
     }
 }

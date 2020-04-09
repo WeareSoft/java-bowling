@@ -1,20 +1,19 @@
 package bowling;
 
+import bowling.score.FrameScore;
 import java.security.InvalidParameterException;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class NormalFrame {
+
     private static final int MIN_PINS = 0;
 
-    private AtomicLong count;
-    private long score;
+    private FrameScore scores;
     private FrameNo frameNo;
     private BowlingThrowStrategy strategy;
 
     public NormalFrame(long frameNo) {
         this.frameNo = new FrameNo(frameNo);
-        this.count = new AtomicLong();
-        this.score = 0;
+        this.scores = new FrameScore();
         this.strategy = new NormalThrowStrategy();
     }
 
@@ -28,17 +27,16 @@ public class NormalFrame {
         }
 
         if (isPossibleThrowing()) {
-            count.incrementAndGet();
-            score += droppedPins;
+            scores.addScore(droppedPins);
         }
     }
 
     private boolean isPossibleThrowing() {
-        return strategy.isPossibleThrowing(score, count.get());
+        return strategy.isPossibleThrowing(scores);
     }
 
     public ScoreType getScore() {
-        return ScoreType.getScoreType(count.get(), score);
+        return ScoreType.getScoreType(scores);
     }
 
     class FrameNo {
