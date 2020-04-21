@@ -1,10 +1,6 @@
 package bowling.frame;
 
-import static bowling.frame.FrameNo.FINAL_FRAME_NO;
-
 import bowling.BowlingThrowStrategy;
-import bowling.FinalThrowStrategy;
-import bowling.NormalThrowStrategy;
 import bowling.score.FrameScore;
 import java.security.InvalidParameterException;
 
@@ -18,7 +14,11 @@ public class Frame {
     private BowlingThrowStrategy strategy;
 
     public Frame(long frameNo, BowlingThrowStrategy bowlingThrowStrategy) {
-        this.frameNo = new FrameNo(frameNo);
+        this(new FrameNo(frameNo), bowlingThrowStrategy);
+    }
+
+    public Frame(FrameNo frameNo, BowlingThrowStrategy bowlingThrowStrategy) {
+        this.frameNo = frameNo;
         this.scores = new FrameScore();
         this.strategy = bowlingThrowStrategy;
     }
@@ -44,27 +44,19 @@ public class Frame {
     }
 
     private void buildNextFrame() {
-        if (!isPossibleThrowing() && !isFinalFrame(frameNo.getValue())) {
-            long nextFrameNo = frameNo.getValue() + 1;
-            BowlingThrowStrategy throwStrategy = new NormalThrowStrategy();
-            if (isFinalFrame(nextFrameNo)) {
-                throwStrategy = new FinalThrowStrategy();
-            }
+        if (!isPossibleThrowing() && !frameNo.isFinalFrame()) {
+            FrameNo nextFrameNo = frameNo.getNextFrameNo();
 
-            nextFrame = new Frame(nextFrameNo, throwStrategy);
+            nextFrame = new Frame(nextFrameNo, BowlingThrowStrategy.build(nextFrameNo));
         }
+    }
+
+    public boolean isComplete() {
+        return !isPossibleThrowing() && frameNo.isFinalFrame();
     }
 
     private boolean isPossibleThrowing() {
         return strategy.isPossibleThrowing(scores);
-    }
-
-    private boolean isFinalFrame(long frameNo) {
-        return frameNo == FINAL_FRAME_NO;
-    }
-
-    public boolean isComplete() {
-        return !isPossibleThrowing() && isFinalFrame(frameNo.getValue());
     }
 
     public FrameScore getScore() {

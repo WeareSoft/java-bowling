@@ -12,6 +12,6 @@ public class FinalThrowStrategy implements BowlingThrowStrategy {
     }
 
     private boolean isBonusChance(FrameScore frameScore) {
-        return frameScore.getCount() == MAX_COUNT && frameScore.getPartScore(0, 2) == MAX_SCORE;
+        return frameScore.getCount() == MAX_COUNT && frameScore.getPartScore(0, MAX_COUNT) == MAX_SCORE;
     }
 }
