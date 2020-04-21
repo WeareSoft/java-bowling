@@ -1,14 +1,12 @@
 package bowling;
 
 import bowling.score.FrameScore;
+import bowling.score.UnitScore;
 
 public class NormalThrowStrategy implements BowlingThrowStrategy {
 
-    private static final int MAX_COUNT = 2;
-    private static final int MAX_SCORE = 10;
-
     @Override
     public boolean isPossibleThrowing(FrameScore frameScore) {
-        return frameScore.getTotalScore() < MAX_SCORE && frameScore.getCount() < MAX_COUNT;
+        return frameScore.getTotalScore() < UnitScore.MAX_SCORE && frameScore.getCount() < MAX_COUNT;
     }
 }

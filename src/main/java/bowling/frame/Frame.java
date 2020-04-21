@@ -1,26 +1,30 @@
-package bowling;
+package bowling.frame;
 
+import static bowling.frame.FrameNo.FINAL_FRAME_NO;
+
+import bowling.BowlingThrowStrategy;
+import bowling.FinalThrowStrategy;
+import bowling.NormalThrowStrategy;
 import bowling.score.FrameScore;
 import java.security.InvalidParameterException;
 
-public class NormalFrame {
+public class Frame {
 
     private static final int MIN_PINS = 0;
-    public static final int FINAL_FRAME_NO = 10;
 
     private FrameScore scores;
     private FrameNo frameNo;
-    private NormalFrame nextFrame;
+    private Frame nextFrame;
     private BowlingThrowStrategy strategy;
 
-    public NormalFrame(long frameNo, BowlingThrowStrategy bowlingThrowStrategy) {
+    public Frame(long frameNo, BowlingThrowStrategy bowlingThrowStrategy) {
         this.frameNo = new FrameNo(frameNo);
         this.scores = new FrameScore();
         this.strategy = bowlingThrowStrategy;
     }
 
     public long getFrameNo() {
-        return frameNo.value;
+        return frameNo.getValue();
     }
 
     public void throwBowling(int droppedPins) {
@@ -40,14 +44,14 @@ public class NormalFrame {
     }
 
     private void buildNextFrame() {
-        if (!isPossibleThrowing() && !isFinalFrame(frameNo.value)) {
-            long nextFrameNo = frameNo.value + 1;
+        if (!isPossibleThrowing() && !isFinalFrame(frameNo.getValue())) {
+            long nextFrameNo = frameNo.getValue() + 1;
             BowlingThrowStrategy throwStrategy = new NormalThrowStrategy();
             if (isFinalFrame(nextFrameNo)) {
                 throwStrategy = new FinalThrowStrategy();
             }
 
-            nextFrame = new NormalFrame(nextFrameNo, throwStrategy);
+            nextFrame = new Frame(nextFrameNo, throwStrategy);
         }
     }
 
@@ -59,24 +63,15 @@ public class NormalFrame {
         return frameNo == FINAL_FRAME_NO;
     }
 
-    public ScoreType getScore() {
-        return ScoreType.getScoreType(scores);
+    public boolean isComplete() {
+        return !isPossibleThrowing() && isFinalFrame(frameNo.getValue());
     }
 
-    public NormalFrame getNextFrame() {
+    public FrameScore getScore() {
+        return scores;
+    }
+
+    public Frame getNextFrame() {
         return this.nextFrame;
-    }
-
-    class FrameNo {
-
-        private long value;
-
-        FrameNo(long value) {
-            if (value <= 0) {
-                throw new InvalidParameterException("required valid frame no");
-            }
-
-            this.value = value;
-        }
     }
 }

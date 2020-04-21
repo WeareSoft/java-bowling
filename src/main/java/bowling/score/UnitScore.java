@@ -1,6 +1,8 @@
 package bowling.score;
 
-class UnitScore {
+public class UnitScore {
+
+    public static final long MAX_SCORE = 10;
     private long score;
 
     public UnitScore(long droppedPins) {

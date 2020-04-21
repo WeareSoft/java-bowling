@@ -1,8 +1,10 @@
 package bowling;
 
+import static bowling.frame.FrameNo.FINAL_FRAME_NO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import bowling.frame.Frame;
 import java.security.InvalidParameterException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,20 +13,20 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class NormalFrameTest {
+class FrameTest {
 
-    private NormalFrame frame;
+    private Frame frame;
 
     @BeforeEach
     public void setUp() {
-        frame = new NormalFrame(1, new NormalThrowStrategy());
+        frame = new Frame(1, new NormalThrowStrategy());
     }
 
     @ParameterizedTest
     @DisplayName("Frame은 프레임 정보(현재 프레임 순서)에 대한 책임을 가지고 있다.")
     @ValueSource(longs = {1, 2, 3})
     public void test(long validFrameNo) {
-        NormalFrame frame = new NormalFrame(validFrameNo, new NormalThrowStrategy());
+        Frame frame = new Frame(validFrameNo, new NormalThrowStrategy());
 
         assertThat(frame.getFrameNo()).isEqualTo(validFrameNo);
     }
@@ -33,7 +35,7 @@ class NormalFrameTest {
     @DisplayName("Frame은 잘못된 프레임 정보(현재 프레임 순서)에 대해 예외를 반환할 책임을 가지고 있다.")
     @ValueSource(longs = {-1, 0})
     public void test2(long invalidFrameNo) {
-        Exception exception = assertThrows(InvalidParameterException.class, () -> new NormalFrame(invalidFrameNo, new NormalThrowStrategy()));
+        Exception exception = assertThrows(InvalidParameterException.class, () -> new Frame(invalidFrameNo, new NormalThrowStrategy()));
 
         assertThat(exception).hasMessageContaining("required valid frame no");
     }
@@ -47,7 +49,7 @@ class NormalFrameTest {
         public void test_strike() {
             frame.throwBowling(10);
 
-            assertThat(frame.getScore()).isEqualTo(ScoreType.Strike);
+            assertThat(frame.getScore().getScoreType()).isEqualTo(ScoreType.Strike);
         }
 
         @Test
@@ -56,7 +58,7 @@ class NormalFrameTest {
             frame.throwBowling(8);
             frame.throwBowling(2);
 
-            assertThat(frame.getScore()).isEqualTo(ScoreType.Spare);
+            assertThat(frame.getScore().getScoreType()).isEqualTo(ScoreType.Spare);
         }
 
         @Test
@@ -65,7 +67,7 @@ class NormalFrameTest {
             frame.throwBowling(0);
             frame.throwBowling(0);
 
-            assertThat(frame.getScore()).isEqualTo(ScoreType.Gutter);
+            assertThat(frame.getScore().getScoreType()).isEqualTo(ScoreType.Gutter);
         }
 
         @Test
@@ -74,7 +76,7 @@ class NormalFrameTest {
             frame.throwBowling(2);
             frame.throwBowling(4);
 
-            assertThat(frame.getScore()).isEqualTo(ScoreType.Miss);
+            assertThat(frame.getScore().getScoreType()).isEqualTo(ScoreType.Miss);
         }
 
         @Test
@@ -91,7 +93,7 @@ class NormalFrameTest {
             frame.throwBowling(10);
             frame.throwBowling(10);
 
-            assertThat(frame.getScore()).isEqualTo(ScoreType.Strike);
+            assertThat(frame.getScore().getScoreType()).isEqualTo(ScoreType.Strike);
         }
 
         @Test
@@ -102,7 +104,7 @@ class NormalFrameTest {
             frame.throwBowling(3);
             frame.throwBowling(3);
 
-            assertThat(frame.getScore()).isEqualTo(ScoreType.Miss);
+            assertThat(frame.getScore().getScoreType()).isEqualTo(ScoreType.Miss);
         }
 
         @Test
@@ -112,7 +114,7 @@ class NormalFrameTest {
             frame.throwBowling(0);
             frame.throwBowling(10);
 
-            assertThat(frame.getScore()).isEqualTo(ScoreType.Gutter);
+            assertThat(frame.getScore().getScoreType()).isEqualTo(ScoreType.Gutter);
         }
     }
 
@@ -131,13 +133,13 @@ class NormalFrameTest {
     public void make_final_frame() {
         assertThat(frame.getNextFrame()).isNull();
 
-        NormalFrame next = frame;
+        Frame next = frame;
         do {
             next.throwBowling(10);
             next = next.getNextFrame();
-        } while (next.getFrameNo() != NormalFrame.FINAL_FRAME_NO);
+        } while (next.getFrameNo() != FINAL_FRAME_NO);
 
         assertThat(next.getNextFrame()).isNull();
-        assertThat(next.getFrameNo()).isEqualTo(NormalFrame.FINAL_FRAME_NO);
+        assertThat(next.getFrameNo()).isEqualTo(FINAL_FRAME_NO);
     }
 }

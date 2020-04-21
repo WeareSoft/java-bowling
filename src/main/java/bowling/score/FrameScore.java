@@ -1,5 +1,6 @@
 package bowling.score;
 
+import bowling.ScoreType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,5 +26,13 @@ public class FrameScore {
 
     public long getCount() {
         return scores.size();
+    }
+
+    public List<UnitScore> getScores() {
+        return scores;
+    }
+
+    public ScoreType getScoreType() {
+        return ScoreType.getScoreType(this);
     }
 }
