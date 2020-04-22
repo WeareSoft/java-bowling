@@ -12,7 +12,7 @@ class FinalThrowStrategyTest {
     @DisplayName("마지막 프레임은 처음 던지는 경우 던질 수 있다")
     public void final_frame_start() {
         BowlingThrowStrategy strategy = new FinalThrowStrategy();
-        FrameScore frameScore = new FrameScore();
+        FrameScore frameScore = new FrameScore(strategy);
 
         assertThat(strategy.isPossibleThrowing(frameScore)).isTrue();
     }
@@ -21,7 +21,7 @@ class FinalThrowStrategyTest {
     @DisplayName("마지막 프레임은 두번째 던지는 경우 던질 수 있다")
     public void final_frame_second() {
         BowlingThrowStrategy strategy = new FinalThrowStrategy();
-        FrameScore frameScore = new FrameScore();
+        FrameScore frameScore = new FrameScore(strategy);
         frameScore.addScore(2);
 
         assertThat(strategy.isPossibleThrowing(frameScore)).isTrue();
@@ -31,7 +31,7 @@ class FinalThrowStrategyTest {
     @DisplayName("마지막 프레임은 2번 내의 모두 쓰러트린 경우 한번 더 던질 수 있다")
     public void final_frame_bonus() {
         BowlingThrowStrategy strategy = new FinalThrowStrategy();
-        FrameScore frameScore = new FrameScore();
+        FrameScore frameScore = new FrameScore(strategy);
         frameScore.addScore(2);
         frameScore.addScore(8);
 
@@ -42,7 +42,7 @@ class FinalThrowStrategyTest {
     @DisplayName("마지막 프레임은 3번 던지면 더 던질 수 없다")
     public void final_frame_exit() {
         BowlingThrowStrategy strategy = new FinalThrowStrategy();
-        FrameScore frameScore = new FrameScore();
+        FrameScore frameScore = new FrameScore(strategy);
         frameScore.addScore(2);
         frameScore.addScore(8);
         frameScore.addScore(4);

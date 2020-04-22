@@ -1,19 +1,31 @@
 package bowling.score;
 
+import bowling.BowlingThrowStrategy;
 import bowling.ScoreType;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FrameScore {
 
-    private List<UnitScore> scores;
+    private static final int MIN_PINS = 0;
 
-    public FrameScore() {
+    private List<UnitScore> scores;
+    private BowlingThrowStrategy strategy;
+
+    public FrameScore(BowlingThrowStrategy bowlingThrowStrategy) {
         this.scores = new ArrayList<>();
+        this.strategy = bowlingThrowStrategy;
     }
 
     public void addScore(long droppedPins) {
-        scores.add(new UnitScore(droppedPins));
+        if (droppedPins < MIN_PINS) {
+            throw new InvalidParameterException("required valid droppedPins");
+        }
+
+        if (isPossibleThrowing()) {
+            scores.add(new UnitScore(droppedPins));
+        }
     }
 
     public long getPartScore(int start, int endExclusive) {
@@ -34,5 +46,9 @@ public class FrameScore {
 
     public ScoreType getScoreType() {
         return ScoreType.getScoreType(this);
+    }
+
+    public boolean isPossibleThrowing() {
+        return strategy.isPossibleThrowing(this);
     }
 }
