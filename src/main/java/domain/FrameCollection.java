@@ -19,4 +19,13 @@ public class FrameCollection {
 
         return stringBuilder.toString();
     }
+
+    public String getScore() {
+        StringBuilder stringBuilder = new StringBuilder();
+        frameList.stream()
+                .map(Frame::getScore)
+                .forEach(s -> stringBuilder.append(s).append("   |   "));
+
+        return stringBuilder.toString();
+    }
 }

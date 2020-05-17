@@ -1,5 +1,7 @@
 package input;
 
+import domain.FallingPin;
+
 import java.util.Scanner;
 
 public class ConsoleBowlingGameInputInterface implements BowlingGameInputtable {
@@ -12,8 +14,8 @@ public class ConsoleBowlingGameInputInterface implements BowlingGameInputtable {
     }
 
     @Override
-    public int getFallingPint() {
+    public FallingPin getFallingPint() {
         System.out.println("쓰러트린 핀: ");
-        return scanner.nextInt();
+        return new FallingPin(scanner.nextInt());
     }
 }

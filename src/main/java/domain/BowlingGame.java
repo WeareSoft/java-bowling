@@ -29,13 +29,13 @@ public class BowlingGame {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("| NAME |");
+        stringBuilder.append("|  NAME  |");
         for (int i = 0; i < MAX_FRAME; i++) {
-            stringBuilder.append("  ").append(i + 1).append("  |");
+            stringBuilder.append("   ").append(i + 1).append("   |");
         }
 
         stringBuilder.append("\n").append(players);
 
-        return stringBuilder.toString();
+        return stringBuilder.toString() + "\n";
     }
 }

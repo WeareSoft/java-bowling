@@ -6,7 +6,7 @@ public class FallingPin {
     private int fallingPinCount;
 
     public FallingPin(int fallingPinCount) {
-        if(fallingPinCount > Frame.DEFAULT_BOWLING_PIN) {
+        if (fallingPinCount > Frame.DEFAULT_BOWLING_PIN) {
             throw new IllegalArgumentException("10개 이하");
         }
         this.fallingPinCount = fallingPinCount;
@@ -16,10 +16,15 @@ public class FallingPin {
         return fallingPinCount;
     }
 
-    public  String getSymbol() {
+    public String getSymbol() {
         if (this.equals(MISS)) {
             return Frame.FrameStatus.MISS.symbol;
         }
+
+        if (this.equals(NONE)) {
+            return Frame.FrameStatus.NONE.symbol;
+        }
+
         return String.valueOf(fallingPinCount);
     }
 

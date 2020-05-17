@@ -1,6 +1,8 @@
 package input;
 
+import domain.FallingPin;
+
 public interface BowlingGameInputtable {
     String getPlayerName();
-    int getFallingPint();
+    FallingPin getFallingPint();
 }

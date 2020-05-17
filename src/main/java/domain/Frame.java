@@ -3,68 +3,103 @@ package domain;
 import static domain.Frame.FrameStatus.*;
 
 public class Frame implements Scorable {
-
 	public final static int DEFAULT_BOWLING_PIN = 10;
 
 	private FallingPin first = FallingPin.NONE;
-	private FallingPin second = FallingPin.NONE;
+    private FallingPin second = FallingPin.NONE;
 
-	public Frame(FallingPin first, FallingPin second) {
-		this.first = first;
-		this.second = second;
-	}
+    private Frame previousFrame;
 
-	@Override
-	public Score getScore() {
-		// some way of calculate score
-		return Score.ZERO_SCORE;
-	}
+    public Frame() {
+        this.previousFrame = this;
+    }
 
-	public boolean isEnd() {
-		if (first.equals(FallingPin.NONE)) {
-			return false;
+    public Frame(Frame previousFrame) {
+        this.previousFrame = previousFrame;
+    }
+
+    public void fall(FallingPin pins) throws IllegalAccessException {
+    	if(first.equals(FallingPin.NONE)) {
+			this.first = pins;
+			return;
 		}
+        this.second = pins;
 
-		return FrameStatus.of(this).equals(STRIKE);
+		if (pinCount() > DEFAULT_BOWLING_PIN) {
+			throw new IllegalAccessException();
+		}
+    }
+
+    private int pinCount() {
+		return first.value() + second.value();
 	}
 
-	public enum FrameStatus {
-		STRIKE("X"), SPARE("/"), MISS("-"), HIT("");
+    @Override
+    public Score getScore() {
+        if (previousFrame.isSpareOrStrike()) {
+            return Score.NOT_DETERMINED;
+        }
 
-		String symbol;
+        if (previousFrame.equals(this)) {
+            return Score.ZERO;
+        }
 
-		FrameStatus(String symbol) {
-			this.symbol = symbol;
-		}
+        Score previousScore = previousFrame.getScore();
+        return Score.of(pinCount() + previousScore.value());
+    }
 
-		public static FrameStatus of(Frame frame) {
-			FallingPin first = frame.first;
+    private boolean isSpareOrStrike() {
+        return (FrameStatus.of(this).equals(STRIKE)) || (FrameStatus.of(this).equals(SPARE));
+    }
 
-			if (first.value() == DEFAULT_BOWLING_PIN) {
-				return STRIKE;
-			}
+    public boolean isEnd() {
+        if(FrameStatus.of(this).equals(STRIKE)) {
+            return true;
+        }
+        return second != FallingPin.NONE;
+    }
 
-			FallingPin second = frame.second;
+    public enum FrameStatus {
+        STRIKE("X"), SPARE("/"), MISS("-"), HIT(""), NONE(" ");
 
-			if (first.value() + second.value() == DEFAULT_BOWLING_PIN) {
-				return SPARE;
-			}
+        String symbol;
 
-			return HIT;
-		}
-	}
+        FrameStatus(String symbol) {
+            this.symbol = symbol;
+        }
 
-	@Override
-	public String toString() {
-		switch (FrameStatus.of(this)) {
-			case STRIKE:
-				return STRIKE.symbol;
+        public static FrameStatus of(Frame frame) {
+            FallingPin first = frame.first;
 
-			case SPARE:
-				return first.getSymbol() + "|" + SPARE.symbol;
+            if (first.equals(FallingPin.NONE)) {
+                return NONE;
+            }
 
-			default:
-				return first.getSymbol() + "|" + second.getSymbol();
-		}
-	}
+            if (first.value() == DEFAULT_BOWLING_PIN) {
+                return STRIKE;
+            }
+
+            FallingPin second = frame.second;
+
+            if (first.value() + second.value() == DEFAULT_BOWLING_PIN) {
+                return SPARE;
+            }
+
+            return HIT;
+        }
+    }
+
+    @Override
+    public String toString() {
+        switch (FrameStatus.of(this)) {
+            case STRIKE:
+                return "   " + STRIKE.symbol + " ";
+
+            case SPARE:
+                return first.getSymbol() + "|" + SPARE.symbol;
+
+            default:
+                return first.getSymbol() + "|" + second.getSymbol();
+        }
+    }
 }
