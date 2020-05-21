@@ -3,36 +3,37 @@ package domain;
 import static domain.Frame.FrameStatus.*;
 
 public class Frame implements Scorable {
-	public final static int DEFAULT_BOWLING_PIN = 10;
+    public final static int DEFAULT_BOWLING_PIN = 10;
+    public final static Frame NONE_FRAME = new Frame(null);
 
-	private FallingPin first = FallingPin.NONE;
+    private FallingPin first = FallingPin.NONE;
     private FallingPin second = FallingPin.NONE;
 
     private Frame previousFrame;
 
-    public Frame() {
+    /*public Frame() {
         this.previousFrame = this;
-    }
+    }*/
 
     public Frame(Frame previousFrame) {
         this.previousFrame = previousFrame;
     }
 
     public void fall(FallingPin pins) throws IllegalAccessException {
-    	if(first.equals(FallingPin.NONE)) {
-			this.first = pins;
-			return;
-		}
+        if (first.equals(FallingPin.NONE)) {
+            this.first = pins;
+            return;
+        }
         this.second = pins;
 
-		if (pinCount() > DEFAULT_BOWLING_PIN) {
-			throw new IllegalAccessException();
-		}
+        if (pinCount() > DEFAULT_BOWLING_PIN) {
+            throw new IllegalAccessException();
+        }
     }
 
     private int pinCount() {
-		return first.value() + second.value();
-	}
+        return first.value() + second.value();
+    }
 
     @Override
     public Score getScore() {
@@ -53,7 +54,7 @@ public class Frame implements Scorable {
     }
 
     public boolean isEnd() {
-        if(FrameStatus.of(this).equals(STRIKE)) {
+        if (FrameStatus.of(this).equals(STRIKE)) {
             return true;
         }
         return second != FallingPin.NONE;

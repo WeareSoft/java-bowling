@@ -1,13 +1,23 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class FrameCollection {
-    private List<Frame> frameList = new ArrayList<>();
+    private LinkedList<Frame> frameList = new LinkedList<>();
 
-    public void add(Frame frame) {
-        frameList.add(frame);
+    public Frame getCurrent() {
+        if(frameList.isEmpty()) {
+            frameList.add(Frame.NONE_FRAME);
+        }
+
+        Frame currentFrame = frameList.getLast();
+        if (currentFrame.isEnd()) {
+            currentFrame = new Frame(currentFrame);
+        }
+        return currentFrame;
     }
 
     @Override
@@ -27,5 +37,11 @@ public class FrameCollection {
                 .forEach(s -> stringBuilder.append(s).append("   |   "));
 
         return stringBuilder.toString();
+    }
+
+    public static void main(String[] args) {
+        LinkedList<Frame> frameList = new LinkedList<>();
+
+        System.out.println(Optional.of(frameList.getLast()).orElse(Frame.NONE_FRAME));
     }
 }

@@ -3,25 +3,14 @@ package domain;
 public class Player {
     private String name;
     private FrameCollection frames = new FrameCollection();
-    private Frame currentFrame = new Frame();
 
     public Player(String playerName) {
         this.name = playerName;
-        frames.add(currentFrame);
     }
 
     public void bowl(FallingPin pins) throws IllegalAccessException {
-        currentFrame = currentFrame();
+        Frame currentFrame = frames.getCurrent();
         currentFrame.fall(pins);
-    }
-
-    private Frame currentFrame() {
-        if(currentFrame.isEnd()) {
-            currentFrame = new Frame(currentFrame);
-            frames.add(currentFrame);
-            return currentFrame;
-        }
-        return currentFrame;
     }
 
     public FrameCollection getFrames() {
@@ -38,6 +27,7 @@ public class Player {
     }
 
     public boolean hasChance() {
+        Frame currentFrame = frames.getCurrent();
         return !currentFrame.isEnd();
     }
 }
