@@ -6,7 +6,7 @@ import bowling.frame.SecondPitchingFrame;
 import bowling.score.Score;
 
 public class Gutter implements FrameResult {
-	public static final String DISPLAY_STRING = "-";
+    static final String DISPLAY_STRING = "-";
 	private final int frameNo;
 	private final boolean isFirstPitching;
 

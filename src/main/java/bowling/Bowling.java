@@ -12,12 +12,6 @@ import java.util.List;
 public class Bowling {
 	private final List<FrameResult> frameResults = new ArrayList<>();
 
-	public void firstBowl(final Score score) {
-		frameResults.clear();
-		final Frame firstFrame = new FirstPitchingFrame(Frame.MIN_NO);
-		bowl(score, firstFrame);
-	}
-
 	public void bowl(final Score score) {
 		if (frameResults.isEmpty()) {
 			firstBowl(score);
@@ -27,6 +21,12 @@ public class Bowling {
 		bowl(score, frame);
 	}
 
+    private void firstBowl(final Score score) {
+        frameResults.clear();
+        final Frame firstFrame = new FirstPitchingFrame(Frame.MIN_NO);
+        bowl(score, firstFrame);
+    }
+
 	private void bowl(final Score score, final Frame frame) {
 		frameResults.add(frame.pitch(score));
 	}
@@ -35,13 +35,13 @@ public class Bowling {
 		return frameResults.isEmpty() || getLastFrameResult().getFrameNo() <= Frame.MAX_NO;
 	}
 
-	public FrameResult getLastFrameResult() {
-		return frameResults.get(frameResults.size() - 1);
-	}
-
 	public int getNextFrameNo() {
 		return getLastFrameResult().getNextFrameNo();
 	}
+
+    private FrameResult getLastFrameResult() {
+        return frameResults.get(frameResults.size() - 1);
+    }
 
 	public ScoreBoard getScoreBoard() {
 		return new ScoreBoard(frameResults);

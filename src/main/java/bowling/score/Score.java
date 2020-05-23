@@ -1,8 +1,8 @@
 package bowling.score;
 
 public class Score {
-	public static final int MIN_VALUE = 0;
-	public static final int MAX_VALUE = 10;
+    private static final int MIN_VALUE = 0;
+    private static final int MAX_VALUE = 10;
 	public static final Score ZERO = Score.of(MIN_VALUE);
 	public static final Score TEN = Score.of(MAX_VALUE);
 

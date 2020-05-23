@@ -5,7 +5,7 @@ import bowling.frame.Frame;
 import bowling.score.Score;
 
 public class Spare implements FrameResult {
-	public static final String DISPLAY_STRING = "/";
+    static final String DISPLAY_STRING = "/";
 	private final int frameNo;
 	private final Score score;
 

@@ -14,4 +14,8 @@ public class Player {
 			throw new IllegalArgumentException("3글자까지 가능");
 		this.name = name;
 	}
+
+    public String getPlayerName() {
+        return name;
+    }
 }

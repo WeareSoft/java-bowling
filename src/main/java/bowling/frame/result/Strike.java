@@ -5,7 +5,7 @@ import bowling.frame.Frame;
 import bowling.score.Score;
 
 public class Strike implements FrameResult {
-	public static final String DISPLAY_STRING = "X";
+    static final String DISPLAY_STRING = "X";
 	private final int frameNo;
 
 	public static Strike of(final int frameNo) {

@@ -16,8 +16,8 @@ public class SecondPitchingFrame implements Frame {
 	}
 
 	@Override
-	public FrameResult pitch(Score score) {
-		Score totalScore = beforeScore.add(score);
+	public FrameResult pitch(final Score score) {
+		final Score totalScore = beforeScore.add(score);
 		if (totalScore.isTen()) {
 			return Spare.of(getFrameNo(), score);
 		}
