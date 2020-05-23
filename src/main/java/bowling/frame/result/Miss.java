@@ -39,6 +39,6 @@ public class Miss implements FrameResult {
 
 	@Override
 	public String toString() {
-		return String.valueOf(score);
+		return score.isZero() ? "-" : String.valueOf(score.toInt());
 	}
 }

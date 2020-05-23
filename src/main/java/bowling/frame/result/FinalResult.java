@@ -42,6 +42,6 @@ public class FinalResult implements FrameResult {
 		if (score.isZero()) {
 			return Gutter.DISPLAY_STRING;
 		}
-		return score.toString();
+		return String.valueOf(score.toInt());
 	}
 }

@@ -39,6 +39,6 @@ public class Hit implements FrameResult {
 
 	@Override
 	public String toString() {
-		return String.valueOf(score);
+		return String.valueOf(score.toInt());
 	}
 }

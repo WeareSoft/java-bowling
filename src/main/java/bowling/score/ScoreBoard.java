@@ -2,7 +2,10 @@ package bowling.score;
 
 import bowling.frame.result.FrameResult;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class ScoreBoard {
 	private final Map<Integer, String> board = new HashMap<>();
@@ -19,5 +22,9 @@ public class ScoreBoard {
 			}
 			board.put(frameNo, frameResult.toString());
 		}
+	}
+
+	public String getFrameScore(final Integer frameNo) {
+		return board.get(frameNo);
 	}
 }

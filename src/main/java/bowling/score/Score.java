@@ -1,8 +1,8 @@
 package bowling.score;
 
 public class Score {
-    private static final int MIN_VALUE = 0;
-    private static final int MAX_VALUE = 10;
+	private static final int MIN_VALUE = 0;
+	private static final int MAX_VALUE = 10;
 	public static final Score ZERO = Score.of(MIN_VALUE);
 	public static final Score TEN = Score.of(MAX_VALUE);
 
@@ -30,20 +30,25 @@ public class Score {
 		return this.equals(Score.TEN);
 	}
 
-	private int toInt() {
+	public int toInt() {
 		return this.value;
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(final Object o) {
 		if (this == o) return true;
 		if (!(o instanceof Score)) return false;
-		Score score = (Score) o;
+		final Score score = (Score) o;
 		return value == score.value;
 	}
 
 	@Override
 	public int hashCode() {
 		return value;
+	}
+
+	@Override
+	public String toString() {
+		return String.valueOf(value);
 	}
 }
