@@ -13,21 +13,17 @@ public class Player {
         currentFrame.fall(pins);
     }
 
-    public FrameCollection getFrames() {
-        return frames;
+    public boolean hasChance() {
+        Frame currentFrame = frames.getCurrent();
+        return !currentFrame.isEnd();
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("|  ").append(name).append("   |").append(frames).append("\n");
-        sb.append("         |").append(frames.getScore());
+        sb.append("         |  ").append(frames.getScore());
 
         return sb.toString();
-    }
-
-    public boolean hasChance() {
-        Frame currentFrame = frames.getCurrent();
-        return !currentFrame.isEnd();
     }
 }

@@ -1,23 +1,17 @@
 package domain;
 
+import java.util.Objects;
+
 import static domain.Frame.FrameStatus.*;
 
 public class Frame implements Scorable {
     public final static int DEFAULT_BOWLING_PIN = 10;
-    public final static Frame NONE_FRAME = new Frame(null);
+    public final static Frame NONE_FRAME = new Frame();
 
     private FallingPin first = FallingPin.NONE;
     private FallingPin second = FallingPin.NONE;
 
-    private Frame previousFrame;
-
-    /*public Frame() {
-        this.previousFrame = this;
-    }*/
-
-    public Frame(Frame previousFrame) {
-        this.previousFrame = previousFrame;
-    }
+    private Frame nextFrame = NONE_FRAME;
 
     public void fall(FallingPin pins) throws IllegalAccessException {
         if (first.equals(FallingPin.NONE)) {
@@ -35,29 +29,66 @@ public class Frame implements Scorable {
         return first.value() + second.value();
     }
 
-    @Override
-    public Score getScore() {
-        if (previousFrame.isSpareOrStrike()) {
-            return Score.NOT_DETERMINED;
-        }
-
-        if (previousFrame.equals(this)) {
-            return Score.ZERO;
-        }
-
-        Score previousScore = previousFrame.getScore();
-        return Score.of(pinCount() + previousScore.value());
-    }
-
-    private boolean isSpareOrStrike() {
-        return (FrameStatus.of(this).equals(STRIKE)) || (FrameStatus.of(this).equals(SPARE));
+    public void setNextFrame(Frame nextFrame) {
+        this.nextFrame = nextFrame;
     }
 
     public boolean isEnd() {
         if (FrameStatus.of(this).equals(STRIKE)) {
             return true;
         }
-        return second != FallingPin.NONE;
+        return !second.equals(FallingPin.NONE);
+    }
+
+    @Override
+    public Score getScore() { // 다듬을 여지 있음
+        if (Objects.isNull(nextFrame) || !isEnd()) {
+            return Score.NOT_DETERMINED;
+        }
+
+        Score nextFrameScore = Score.of(0);
+
+        if (FrameStatus.of(this).equals(STRIKE)) {
+            if (!nextFrame.isEnd()) {
+                return Score.NOT_DETERMINED;
+            }
+            nextFrameScore = nextFrame.getFallingPinCount();
+        }
+
+        if (FrameStatus.of(this).equals(SPARE)) {
+            if (nextFrame.isEndFirstTry()) {
+                return Score.NOT_DETERMINED;
+            }
+            nextFrameScore = nextFrame.getFallingPinCountAtFirstTry();
+        }
+
+        return getFallingPinCount().add(nextFrameScore);
+    }
+
+    private boolean isEndFirstTry() {
+        return first.equals(FallingPin.NONE);
+    }
+
+    private Score getFallingPinCountAtFirstTry() {
+        return Score.of(first.value());
+    }
+
+    private Score getFallingPinCount() {
+        return Score.of(first.value() + second.value());
+    }
+
+    @Override
+    public String toString() {
+        switch (FrameStatus.of(this)) {
+            case STRIKE:
+                return "   " + STRIKE.symbol + "   ";
+
+            case SPARE:
+                return "  " + first.getSymbol() + "|" + SPARE.symbol + "  ";
+
+            default:
+                return "  " + first.getSymbol() + "|" + second.getSymbol() + "  ";
+        }
     }
 
     public enum FrameStatus {
@@ -87,20 +118,6 @@ public class Frame implements Scorable {
             }
 
             return HIT;
-        }
-    }
-
-    @Override
-    public String toString() {
-        switch (FrameStatus.of(this)) {
-            case STRIKE:
-                return "   " + STRIKE.symbol + " ";
-
-            case SPARE:
-                return first.getSymbol() + "|" + SPARE.symbol;
-
-            default:
-                return first.getSymbol() + "|" + second.getSymbol();
         }
     }
 }

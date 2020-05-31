@@ -1,8 +1,7 @@
 package domain;
 
 public class Score {
-    public final static Score ZERO = Score.of(0);
-    public final static Score NOT_DETERMINED = Score.of(-1);
+    public final static Score NOT_DETERMINED = Score.of(0);
 
     private int score;
 
@@ -14,16 +13,17 @@ public class Score {
         return new Score(score);
     }
 
-    public int value() {
-        return score;
+    public Score add(Score score) {
+        this.score += score.score;
+        return Score.of(this.score);
     }
 
     @Override
     public String toString() {
         if (this.equals(NOT_DETERMINED)) {
-            return "    ";
+            return "  ";
         }
 
-        return String.valueOf(score);
+        return String.format("%2d", score);
     }
 }

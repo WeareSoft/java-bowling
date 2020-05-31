@@ -22,16 +22,12 @@ public class BowlingGame {
         return players.getCurrentPlayer();
     }
 
-    public int getNowFrameNumber() {
-        return nowFrameNumber;
-    }
-
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("|  NAME  |");
         for (int i = 0; i < MAX_FRAME; i++) {
-            stringBuilder.append("   ").append(i + 1).append("   |");
+            stringBuilder.append(String.format("  %2d   |", i + 1));
         }
 
         stringBuilder.append("\n").append(players);

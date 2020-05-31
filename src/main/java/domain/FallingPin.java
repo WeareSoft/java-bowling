@@ -13,6 +13,9 @@ public class FallingPin {
     }
 
     public int value() {
+        if(this.equals(NONE)) {
+            return 0;
+        }
         return fallingPinCount;
     }
 
